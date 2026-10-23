@@ -1,0 +1,37 @@
+import { render } from 'preact';
+import { useEffect, useState } from 'preact/hooks';
+import { Activity, Boxes, Cable, CircleDot, Cpu, FlaskConical, GitBranch, History as HistoryIcon, LayoutDashboard, LogOut, Menu, Moon, Settings as SettingsIcon, Sun, X } from 'lucide-preact';
+import { api, Data, message, refresh, setSession } from './api';
+import { Builder } from './builder/Builder';
+import { Connections } from './connections/Connections';
+import { Decisions } from './dashboard/Decisions';
+import { History } from './dashboard/History';
+import { Overview } from './dashboard/Overview';
+import { Settings } from './dashboard/Settings';
+import { Models } from './models/Models';
+import { Testing } from './testing/Testing';
+import { Button, ErrorBox, Field, Loading, Secret, Status, Toasts } from './ui';
+import './style.css';
+
+const navigation = [ ['overview', 'Overview', LayoutDashboard], ['decisions', 'Decisions', Boxes], ['builder', 'Builder', GitBranch], ['connections', 'Connections', Cable], ['models', 'Models', Cpu], ['testing', 'Live testing', FlaskConical], ['history', 'History', HistoryIcon], ['settings', 'Settings', SettingsIcon] ] as const;
+function Brand() { return <div class="brand"><span class="brand-mark"><GitBranch size={21} /></span><div><strong>Pi Decision</strong><small>Orchestrator</small></div></div>; }
+function Login({ onLogin, expired }: { onLogin: (user: Data) => void; expired: boolean }) {
+  const [username, setUsername] = useState('admin'), [password, setPassword] = useState(''), [busy, setBusy] = useState(false), [error, setError] = useState('');
+  return <div class="login-page"><div class="login-brand"><Brand /><div class="login-statement"><div class="login-topology"><span>Input state</span><GitBranch size={22} /><span>Decision</span><Activity size={22} /><span>Action</span></div><h1>Small node.<br />Considered decisions.</h1><p>Build, test, and operate local decision workflows. Keep your inputs, models, and execution history on your Pi.</p></div><small>Local inference · Explicit policies · Authorized actions</small></div><div class="login-form-area"><form class="login-form" onSubmit={async e => { e.preventDefault(); setBusy(true); setError(''); try { const user = await api('/auth/login', { username, password }); setPassword(''); onLogin(user); } catch (e) { setError(message(e)); } finally { setBusy(false); } }}><h2>{expired ? 'Sign in again' : 'Connect to your node'}</h2><p>{expired ? 'Your session expired. Sign in to continue; unsaved workflow edits are retained in this tab.' : 'Use the administrator credentials created during installation.'}</p>{error && <ErrorBox error={error} />}<Field label="Username"><input autoComplete="username" required value={username} onInput={e => setUsername(e.currentTarget.value)} /></Field><Secret label="Password" value={password} onChange={setPassword} autoComplete="current-password" required /><Button type="submit" variant="primary" busy={busy}>Sign in</Button><p class="login-footnote">Initial credentials are stored in <code>/etc/pi-decision/initial-admin.txt</code> on the Pi. Ask the node administrator if you need access.</p></form></div></div>;
+}
+
+function App() {
+  const [user, setUser] = useState<Data | null>(null), [loading, setLoading] = useState(true), [expired, setExpired] = useState(false), [route, setRoute] = useState(location.hash.slice(2) || 'overview'), [menu, setMenu] = useState(false), [theme, setTheme] = useState(localStorage.getItem('pi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')), [online, setOnline] = useState(false);
+  function signIn(value: Data) { setSession(value); setUser(value); setExpired(false); }
+  useEffect(() => { document.documentElement.dataset.theme = theme; localStorage.setItem('pi-theme', theme); }, [theme]);
+  useEffect(() => { api('/auth/me').then(signIn).catch(() => {}).finally(() => setLoading(false)); const change = () => { setRoute(location.hash.slice(2) || 'overview'); setMenu(false); document.getElementById('main')?.focus(); window.scrollTo(0, 0); }; const session = () => { setUser(null); setExpired(true); }; window.addEventListener('hashchange', change); window.addEventListener('session-expired', session); return () => { window.removeEventListener('hashchange', change); window.removeEventListener('session-expired', session); }; }, []);
+  useEffect(() => { if (!user) return; const stream = new EventSource('/api/v1/events/stream', { withCredentials: true }); stream.onopen = () => setOnline(true); stream.onerror = () => setOnline(false); stream.addEventListener('change', refresh); stream.addEventListener('telemetry', refresh); stream.addEventListener('session_expired', () => { stream.close(); setUser(null); setExpired(true); }); return () => { stream.close(); setOnline(false); }; }, [user]);
+  const [page, id] = route.split('/'), section = navigation.find(([key]) => key === page), canEdit = user?.role !== 'viewer';
+  useEffect(() => { document.title = `${section?.[1] || 'Dashboard'} · Pi Decision`; }, [page]);
+  if (loading) return <Loading label="Connecting to Pi Decision…" />;
+  if (!user) return <><Login onLogin={signIn} expired={expired} /><Toasts /></>;
+  return <><a class="skip-link" href="#main">Skip to content</a><div class="app-shell">{menu && <button class="sidebar-backdrop" aria-label="Close navigation" onClick={() => setMenu(false)} />}<aside class={`sidebar ${menu ? 'open' : ''}`}><Brand /><nav class="nav-links" aria-label="Main navigation">{navigation.map(([key, label, Icon]) => <a href={'#/' + key} key={key} aria-current={page === key ? 'page' : undefined}><Icon size={18} strokeWidth={1.6} />{label}</a>)}</nav><div class="nav-footer"><Status value={online ? 'online' : 'reconnecting'} /><p>Local processing node<br />CPU inference · ARM64 ready</p><span class="mono">v1.0.0</span></div></aside>
+  <div class="shell-body"><header class="topbar"><div class="topbar-left"><button class="icon-button mobile-toggle" onClick={() => setMenu(!menu)} aria-label={menu ? 'Close menu' : 'Open menu'} aria-expanded={menu}>{menu ? <X size={20} /> : <Menu size={20} />}</button><strong>Decision processing node</strong><span class="separator" /><Status value={online ? 'online' : 'reconnecting'} /></div><div class="topbar-right"><span class="topbar-user">{user.username} · {user.role}</span><button class="icon-button" aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'} onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}</button><button class="icon-button" aria-label="Sign out" onClick={async () => { try { await api('/auth/logout', {}); setUser(null); setSession({}); } catch (e) { window.dispatchEvent(new CustomEvent('toast', { detail: { message: message(e), error: true } })); } }}><LogOut size={18} /></button></div></header>
+  <main class="main" id="main" tabIndex={-1}>{page === 'overview' || !section ? <Overview /> : page === 'decisions' ? <Decisions /> : page === 'builder' ? <Builder id={id} canEdit={canEdit} /> : page === 'connections' ? <Connections admin={user.role === 'admin'} /> : page === 'models' ? <Models admin={user.role === 'admin'} /> : page === 'testing' ? <Testing id={id} canEdit={canEdit} /> : page === 'history' ? <History id={id} canEdit={canEdit} /> : <Settings user={user} />}</main></div></div><Toasts /></>;
+}
+render(<App />, document.getElementById('app')!);

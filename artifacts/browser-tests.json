@@ -1,0 +1,217 @@
+{
+  "config": {
+    "argv": [
+      "/home/robit/.nvm/versions/node/v22.22.1/bin/node",
+      "/home/robit/pi-decision-orchestrator/frontend/node_modules/.bin/playwright",
+      "test"
+    ],
+    "configFile": "/home/robit/pi-decision-orchestrator/frontend/playwright.config.ts",
+    "rootDir": "/home/robit/pi-decision-orchestrator/frontend/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/robit/pi-decision-orchestrator/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/robit/pi-decision-orchestrator/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/robit/pi-decision-orchestrator/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/home/robit/pi-decision-orchestrator/frontend/tests",
+        "snapshotDir": "/home/robit/pi-decision-orchestrator/frontend/tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8766",
+          "browserName": "chromium",
+          "headless": true,
+          "screenshot": "only-on-failure",
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../artifacts/browser-tests.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "../.venv/bin/uvicorn tests.e2e_server:app --host 127.0.0.1 --port 8766 --app-dir ..",
+      "url": "http://127.0.0.1:8766/api/v1/health",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "workflows.spec.ts",
+      "file": "workflows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "guided workflow, graph, inference, fixtures, connections, and account controls",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 90969,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 90000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 90000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 90000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "/home/robit/pi-decision-orchestrator/frontend/tests/workflows.spec.ts",
+                        "column": 61,
+                        "line": 58
+                      },
+                      "message": "Error: locator.selectOption: Test timeout of 90000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Connection type', { exact: true })\u001b[22m\n\n\n  56 |   await page.getByRole('button', { name: 'New connection', exact: true }).click();\n  57 |   await page.getByLabel('Connection name', { exact: true }).fill('Browser local source ' + Date.now());\n> 58 |   await page.getByLabel('Connection type', { exact: true }).selectOption('json');\n     |                                                             ^\n  59 |   await page.getByLabel('Enable connection', { exact: true }).check();\n  60 |   await page.getByRole('button', { name: 'Save connection', exact: true }).click();\n  61 |   await expect(page.getByText('Connection saved.', { exact: true })).toBeVisible();\n    at /home/robit/pi-decision-orchestrator/frontend/tests/workflows.spec.ts:58:61"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T00:48:13.368Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/home/robit/pi-decision-orchestrator/frontend/test-results/workflows-guided-workflow--c8bcc-ctions-and-account-controls/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/robit/pi-decision-orchestrator/frontend/test-results/workflows-guided-workflow--c8bcc-ctions-and-account-controls/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/home/robit/pi-decision-orchestrator/frontend/test-results/workflows-guided-workflow--c8bcc-ctions-and-account-controls/trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "26aa48cee8983222f549-85681bee90b903304e37",
+          "file": "workflows.spec.ts",
+          "line": 13,
+          "column": 1
+        },
+        {
+          "title": "mobile navigation, form usability, dark mode, and layout",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2835,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T00:49:46.700Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "26aa48cee8983222f549-2a22b76914fe9552368b",
+          "file": "workflows.spec.ts",
+          "line": 79,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-23T00:48:09.862Z",
+    "duration": 99927.053,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "architecture": "aarch64",
+  "userspace_bits": 64,
+  "ram_bytes": 8191807488,
+  "tested_at": 1792713646.759127,
+  "models": [
+    {
+      "name": "laya",
+      "status": "supported",
+      "samples": [
+        {
+          "trial": 0,
+          "cold": true,
+          "latency_ms": 30817.394630999843,
+          "response": {
+            "model": "laya",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "technical",
+                "probabilities": {
+                  "billing": 0.04880560356249276,
+                  "technical": 0.9511943964375074
+                },
+                "confidence": 0.9023887928750147
+              },
+              "urgent": {
+                "type": "noul",
+                "noul": 0.7877967378842894
+              },
+              "severity": {
+                "type": "score",
+                "score": 1.880258629053629,
+                "legend": {
+                  "0": "Minor inconvenience",
+                  "1": "Partial disruption",
+                  "2": "Complete outage"
+                },
+                "probabilities": {
+                  "0": 0.0233562223779934,
+                  "1": 0.07302892619038419,
+                  "2": 0.9036148514316223
+                },
+                "confidence": 0.8203879435804435
+              }
+            },
+            "usage": {
+              "input_tokens": 133,
+              "output_tokens": 0
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "cold": false,
+          "latency_ms": 27488.05748199993,
+          "response": {
+            "model": "laya",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "technical",
+                "probabilities": {
+                  "billing": 0.04880560356249276,
+                  "technical": 0.9511943964375074
+                },
+                "confidence": 0.9023887928750147
+              },
+              "urgent": {
+                "type": "noul",
+                "noul": 0.7877967378842894
+              },
+              "severity": {
+                "type": "score",
+                "score": 1.880258629053629,
+                "legend": {
+                  "0": "Minor inconvenience",
+                  "1": "Partial disruption",
+                  "2": "Complete outage"
+                },
+                "probabilities": {
+                  "0": 0.0233562223779934,
+                  "1": 0.07302892619038419,
+                  "2": 0.9036148514316223
+                },
+                "confidence": 0.8203879435804435
+              }
+            },
+            "usage": {
+              "input_tokens": 133,
+              "output_tokens": 0
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "cold": false,
+          "latency_ms": 27767.831389000094,
+          "response": {
+            "model": "laya",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "technical",
+                "probabilities": {
+                  "billing": 0.04880560356249276,
+                  "technical": 0.9511943964375074
+                },
+                "confidence": 0.9023887928750147
+              },
+              "urgent": {
+                "type": "noul",
+                "noul": 0.7877967378842894
+              },
+              "severity": {
+                "type": "score",
+                "score": 1.880258629053629,
+                "legend": {
+                  "0": "Minor inconvenience",
+                  "1": "Partial disruption",
+                  "2": "Complete outage"
+                },
+                "probabilities": {
+                  "0": 0.0233562223779934,
+                  "1": 0.07302892619038419,
+                  "2": 0.9036148514316223
+                },
+                "confidence": 0.8203879435804435
+              }
+            },
+            "usage": {
+              "input_tokens": 133,
+              "output_tokens": 0
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "cold": false,
+          "latency_ms": 27550.094404000447,
+          "response": {
+            "model": "laya",
+            "answers": {
+              "team": {
+                "type": "choice",
+                "choice": "technical",
+                "probabilities": {
+                  "billing": 0.04880560356249276,
+                  "technical": 0.9511943964375074
+                },
+                "confidence": 0.9023887928750147
+              },
+              "urgent": {
+                "type": "noul",
+                "noul": 0.7877967378842894
+              },
+              "severity": {
+                "type": "score",
+                "score": 1.880258629053629,
+                "legend": {
+                  "0": "Minor inconvenience",
+                  "1": "Partial disruption",
+                  "2": "Complete outage"
+                },
+                "probabilities": {
+                  "0": 0.0233562223779934,
+                  "1": 0.07302892619038419,
+                  "2": 0.9036148514316223
+                },
+                "confidence": 0.8203879435804435
+              }
+            },
+            "usage": {
+              "input_tokens": 133,
+              "output_tokens": 0
+            }
+          }
+        }
+      ],
+      "digest": "1f196b378202837961e8856ceeb36af8b03c4b6158f6b02f15cc2b0a99b65e5a",
+      "cold_start_ms": 30817.394630999843,
+      "warm_mean_ms": 27601.994425000157,
+      "warm_p95_ms": 27767.831389000094,
+      "observed_peak_runner_rss_bytes": 36380672,
+      "cpu_mean_percent": 97.80251396648045,
+      "peak_temperature_c": 71.575,
+      "sampling_interval_s": 0.1,
+      "quality_notice": "Compatibility, not a decision-accuracy evaluation.",
+      "rss_measurement_valid": false,
+      "rss_measurement_note": "Initial compatibility sampler missed separately named runner descendants. Use deployed application RSS measurements; do not interpret this value as model peak RAM."
+    }
+  ],
+  "ollama_version": "0.40.8"
+}

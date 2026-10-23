@@ -1,0 +1,21 @@
+import { CheckCircle2 } from 'lucide-preact';
+import { Data, duration, when } from '../api';
+import { Empty, JsonView, Status } from '../ui';
+
+export function Results({ execution }: { execution: Data | null }) {
+  if (!execution) return <Empty title="Ready for a test decision">Submit input to inspect the full option distribution, acceptance gates, and proposed actions.</Empty>;
+  const result = execution.result;
+  return <div aria-live="polite"><div class="result-heading"><Status value={execution.status} /><span class="mono">{execution.id.slice(0, 12)}</span></div>
+    {['queued', 'running'].includes(execution.status) && <div class="execution-live" role="status">{execution.status === 'queued' ? 'Waiting in the bounded inference queue…' : 'Model inference is running…'} CPU inference on the Pi can take tens of seconds.</div>}
+    {execution.error && <div class="notice warning" style={{ marginTop: '15px' }}>{execution.error}</div>}
+    <div class="result-metadata"><span>Model <strong>{execution.model}</strong></span><span>Total <strong>{duration(execution.latency_ms)}</strong></span><span>Inference <strong>{duration(execution.inference_ms)}</strong></span><span>{execution.dry_run ? 'Simulation · no actions sent' : 'Live execution'}</span></div>
+    {result && <>
+      {result.trace?.length > 0 && <div class="trace-list" aria-label="Execution trace">{result.trace.map((step: Data, i: number) => <div class="trace-step" key={step.id || i}><CheckCircle2 size={19} /><strong>{step.name || step.type}</strong><small>{step.outcome || step.status} · {duration(step.duration_ms)}</small></div>)}</div>}
+      {Object.entries(result.answers || {}).map(([name, raw]) => { const answer = raw as Data, selected = String(answer.selected).toLowerCase(); return <section class="result-question" key={name}><h3>{name}</h3><div class="result-choice">{String(answer.selected)}</div>{answer.score != null && <p class="inline-help">Weighted rubric score: {Number(answer.score).toFixed(3)}</p>}{answer.probabilities ? <div class="probability-chart" role="img" aria-label={`${name} option probabilities`}>{Object.entries(answer.probabilities).sort((a, b) => Number(b[1]) - Number(a[1])).map(([option, p]) => <div class={`probability-row ${option === selected ? 'selected' : ''}`} key={option}><span class="probability-name">{option}{answer.legend?.[option] ? ` · ${answer.legend[option]}` : ''}</span><div class="probability-track"><span style={{ width: Number(p) * 100 + '%' }} /></div><span class="probability-value">{(Number(p) * 100).toFixed(1)}%</span></div>)}</div> : <p class="notice warning">This adapter returned a structured selection without native probabilities. No distribution has been inferred or fabricated.</p>}<div class="result-metadata"><span>Leading margin <strong>{answer.margin == null ? 'Unavailable' : (answer.margin * 100).toFixed(1) + ' pp'}</strong></span><span>Source <strong>{answer.source}</strong></span>{answer.concentration != null && <span>Model confidence diagnostic <strong>{Number(answer.concentration).toFixed(3)}</strong></span>}</div></section>; })}
+      <hr /><div class={`notice ${result.policy?.accepted ? 'success' : 'warning'}`}><strong>{result.policy?.accepted ? 'Acceptance policy passed' : 'Decision abstained'}</strong>{result.policy?.reasons?.map((reason: string) => <p key={reason}>{reason}</p>)}{!result.policy?.accepted && <p>Fallback: {result.policy?.fallback || 'abstain'}. External actions are skipped.</p>}</div>
+      {result.actions?.length > 0 && <><h3>Actions</h3><div class="table-wrap"><table><thead><tr><th>Action</th><th>Status</th><th>Reason</th></tr></thead><tbody>{result.actions.map((a: Data, i: number) => <tr key={a.id || i}><td>{a.name || a.id}</td><td><Status value={a.status} /></td><td>{a.reason || (a.child_execution_id ? 'Queued child workflow' : 'Validated output')}</td></tr>)}</tbody></table></div></>}
+      <p class="inline-help">A high option probability describes this model’s distribution. Use labeled evaluations to measure correctness and calibration for your workload.</p>
+      <JsonView title="Normalized state and transformations" value={{ source: result.source, state: result.normalized_state, transforms: result.transforms }} /><JsonView title="Complete execution record" value={execution} />
+    </>}
+  </div>;
+}

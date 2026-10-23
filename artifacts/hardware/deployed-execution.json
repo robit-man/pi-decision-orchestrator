@@ -1,0 +1,127 @@
+{
+  "id": "63d08a6ea616414386a25b6df38ea241",
+  "decision_id": "746ea05ba7d74427a5678eb20064755c",
+  "version": 1,
+  "status": "abstained",
+  "dry_run": true,
+  "created": 1792716487.5295446,
+  "started": 1792716487.5578842,
+  "finished": 1792716493.2716334,
+  "latency_ms": 5742.089748382568,
+  "inference_ms": 5657.526283000152,
+  "model": "d1-omni",
+  "model_digest": "1ba59f63e8363dbec439b18fd03eec16aadfecee48c445f1283dabd00c612ca3",
+  "input": {
+    "objective": "reach_target",
+    "distance_m": 1.2,
+    "obstacle_detected": true,
+    "battery_percent": 78,
+    "system_healthy": true
+  },
+  "result": {
+    "answers": {
+      "next_action": {
+        "selected": "inspect",
+        "probabilities": {
+          "continue": 0.34193555460609637,
+          "reroute": 0.006966994337975767,
+          "stop": 0.2136879206173874,
+          "inspect": 0.4374095304385404
+        },
+        "selected_probability": 0.4374095304385404,
+        "margin": 0.09547397583244405,
+        "source": "native",
+        "concentration": 0.2498793739180539,
+        "score": null,
+        "legend": null
+      }
+    },
+    "normalized_state": {
+      "objective": "reach_target",
+      "distance_m": 1.2,
+      "obstacle_detected": true,
+      "battery_percent": 78,
+      "system_healthy": true
+    },
+    "transforms": [],
+    "policy": {
+      "accepted": false,
+      "reasons": [
+        "next_action: selected outcome probability is below the policy threshold",
+        "next_action: the leading outcomes are too close"
+      ],
+      "fallback": "inspect",
+      "probability_notice": "Model probabilities are not a calibrated guarantee of correctness."
+    },
+    "trace": [
+      {
+        "id": "input",
+        "name": "Input",
+        "type": "input",
+        "status": "completed",
+        "outcome": "",
+        "duration_ms": 0.0049450000005890615
+      },
+      {
+        "id": "transform",
+        "name": "Transform",
+        "type": "transform",
+        "status": "completed",
+        "outcome": "",
+        "duration_ms": 0.029795999580528587
+      },
+      {
+        "id": "inference",
+        "name": "Ask model",
+        "type": "inference",
+        "status": "completed",
+        "outcome": "",
+        "duration_ms": 5689.604890999362
+      },
+      {
+        "id": "evaluate",
+        "name": "Apply policy",
+        "type": "evaluate",
+        "status": "completed",
+        "outcome": "uncertain",
+        "duration_ms": 0.04399899989948608
+      },
+      {
+        "id": "action",
+        "name": "Authorized actions",
+        "type": "action",
+        "status": "completed",
+        "outcome": "",
+        "duration_ms": 0.0330360007865238
+      },
+      {
+        "id": "log",
+        "name": "Log",
+        "type": "log",
+        "status": "completed",
+        "outcome": "",
+        "duration_ms": 6.6172629994980525
+      }
+    ],
+    "actions": [
+      {
+        "id": "notify",
+        "name": "Notify dashboard",
+        "status": "proposed",
+        "reason": "Simulation mode"
+      }
+    ],
+    "models": [
+      {
+        "model": "d1-omni",
+        "digest": "1ba59f63e8363dbec439b18fd03eec16aadfecee48c445f1283dabd00c612ca3",
+        "inference_ms": 5657.526283000152
+      }
+    ],
+    "model_digest": "1ba59f63e8363dbec439b18fd03eec16aadfecee48c445f1283dabd00c612ca3",
+    "inference_ms": 5657.526283000152,
+    "source": "manual"
+  },
+  "error": null,
+  "idempotency_key": null
+}

@@ -1,0 +1,1 @@
+"""Low frequency resource telemetry."""
